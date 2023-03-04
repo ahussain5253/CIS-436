@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Arithmetic Game</string>
+    <string name="rollButtonText">Roll Die</string>
+    <string name="p1Total">Player 1 Total:</string>
+    <string name="p2Total">Player 2 Total:</string>
+    <string name="jackpotTotal">Jackpot Amount:</string>
+    <string name="currentPlayerText">Current Player:</string>
+    <string name="NULL" />
+    <string name="problemText">Ready?</string>
+    <string name="NULL2" />
+    <string name="GuessBtnTxt">Guess</string>
+    <string name="p1Amt">0</string>
+    <string name="p2Amt">0</string>
+    <string name="cdescription">DieImg</string>
+    <string name="jackpotAmt">5</string>
+    <string name="currentPlayer">P1</string>
+</resources>
