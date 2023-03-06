@@ -1,6 +1,7 @@
 package com.example.arithmeticgame
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,8 +17,46 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        var currentPlayer = 1
+        binding.playAgain.visibility = View.INVISIBLE
+
         val rollButton: Button = findViewById(R.id.RollDieBtn)
-        rollButton.setOnClickListener { runGame() }
+        rollButton.setOnClickListener {
+            val playerText: TextView = binding.CurrentPlayer
+
+            if (getPlayer1Points() >= 20) {
+                binding.playAgain.visibility = View.VISIBLE
+                setProblemText("Player 1 Wins!!")
+                binding.GuessBtn.visibility = View.INVISIBLE
+                binding.playAgain.setOnClickListener {
+                    playAgain()
+                }
+            }
+            else if (getPlayer2Points() >= 20) {
+                binding.playAgain.visibility = View.VISIBLE
+                setProblemText("Player 2 Wins!!")
+                binding.GuessBtn.visibility = View.INVISIBLE
+                binding.playAgain.setOnClickListener {
+                    playAgain()
+                }
+            }
+
+            binding.playAgain.visibility = View.INVISIBLE
+
+            when (currentPlayer) {
+                1 -> {
+                    "P1".also { playerText.text = it }
+                    runGame(1)}
+                2 -> {
+                    "P2".also { playerText.text = it }
+                    runGame(2)}
+            }
+
+            when (currentPlayer) {
+                1 -> currentPlayer = 2
+                2 -> currentPlayer = 1
+            }
+        }
     }
 
     private fun rollDice(): Int {
@@ -74,9 +113,17 @@ class MainActivity : AppCompatActivity() {
         player2Amt.text = player2Points.toString()
     }
 
-    private fun runGame() {
+    private fun playAgain() {
+        setProblemText("Ready?")
+        setPlayer1Points(0)
+        setPlayer2Points(0)
+        setJackpotPoints(5)
+    }
+
+    private fun runGame(currentPlayer: Int) {
         val doublePointsText: TextView = binding.DoublePointsText
         " ".also { doublePointsText.text = it }
+        binding.GuessBtn.visibility = View.VISIBLE
 
         when (rollDice()) {
             1 -> {
@@ -93,10 +140,15 @@ class MainActivity : AppCompatActivity() {
                     val userAnswerD = uAnsTxt.toDouble()
                     val userAnswer = userAnswerD.toInt()
 
-                    if (userAnswer == answer) {
+                    if ((userAnswer == answer) && (currentPlayer == 1)) {
                         setPlayer1Points(getPlayer1Points() + 1)
-                    } else {
+                        "Correct!".also { doublePointsText.text = it }
+                    } else if ((userAnswer == answer) && (currentPlayer == 2)) {
+                        setPlayer2Points(getPlayer2Points() + 1)
+                        "Correct!".also { doublePointsText.text = it }
+                    } else if (userAnswer != answer) {
                         setJackpotPoints(getJackpotPoints() + 1)
+                        "Incorrect!".also { doublePointsText.text = it }
                     }
                 }
             } // Addition
@@ -113,10 +165,15 @@ class MainActivity : AppCompatActivity() {
                     val userAnswerD = uAnsTxt.toDouble()
                     val userAnswer = userAnswerD.toInt()
 
-                    if (userAnswer == answer) {
+                    if ((userAnswer == answer) && (currentPlayer == 1)) {
                         setPlayer1Points(getPlayer1Points() + 2)
-                    } else {
+                        "Correct!".also { doublePointsText.text = it }
+                    } else if ((userAnswer == answer) && (currentPlayer == 2)) {
+                        setPlayer2Points(getPlayer2Points() + 2)
+                        "Correct!".also { doublePointsText.text = it }
+                    } else if (userAnswer != answer) {
                         setJackpotPoints(getJackpotPoints() + 2)
+                        "Incorrect!".also { doublePointsText.text = it }
                     }
                 }
             } // Subtraction
@@ -133,13 +190,16 @@ class MainActivity : AppCompatActivity() {
                     val userAnswerD = uAnsTxt.toDouble()
                     val userAnswer = userAnswerD.toInt()
 
-                    if (userAnswer == answer) {
+                    if ((userAnswer == answer) && (currentPlayer == 1)) {
                         setPlayer1Points(getPlayer1Points() + 3)
-                    } else {
+                        "Correct!".also { doublePointsText.text = it }
+                    } else if ((userAnswer == answer) && (currentPlayer == 2)) {
+                        setPlayer2Points(getPlayer2Points() + 3)
+                        "Correct!".also { doublePointsText.text = it }
+                    } else if (userAnswer != answer) {
                         setJackpotPoints(getJackpotPoints() + 3)
+                        "Incorrect!".also { doublePointsText.text = it }
                     }
-
-
                 }
             } // Multiplication
             4 -> {
@@ -158,10 +218,15 @@ class MainActivity : AppCompatActivity() {
                             val userAnswerD = uAnsTxt.toDouble()
                             val userAnswer = userAnswerD.toInt()
 
-                            if (userAnswer == answer) {
+                            if ((userAnswer == answer) && (currentPlayer == 1)) {
                                 setPlayer1Points(getPlayer1Points() + 2)
-                            } else {
+                                "Correct!".also { doublePointsText.text = it }
+                            } else if ((userAnswer == answer) && (currentPlayer == 2)) {
+                                setPlayer2Points(getPlayer2Points() + 2)
+                                "Correct!".also { doublePointsText.text = it }
+                            } else if (userAnswer != answer) {
                                 setJackpotPoints(getJackpotPoints() + 2)
+                                "Incorrect!".also { doublePointsText.text = it }
                             }
                         }
                     } // Addition
@@ -179,10 +244,15 @@ class MainActivity : AppCompatActivity() {
                             val userAnswerD = uAnsTxt.toDouble()
                             val userAnswer = userAnswerD.toInt()
 
-                            if (userAnswer == answer) {
+                            if ((userAnswer == answer) && (currentPlayer == 1)) {
                                 setPlayer1Points(getPlayer1Points() + 4)
-                            } else {
+                                "Correct!".also { doublePointsText.text = it }
+                            } else if ((userAnswer == answer) && (currentPlayer == 2)) {
+                                setPlayer2Points(getPlayer2Points() + 4)
+                                "Correct!".also { doublePointsText.text = it }
+                            } else if (userAnswer != answer) {
                                 setJackpotPoints(getJackpotPoints() + 4)
+                                "Incorrect!".also { doublePointsText.text = it }
                             }
                         }
                     } // Subtraction
@@ -200,15 +270,52 @@ class MainActivity : AppCompatActivity() {
                             val userAnswerD = uAnsTxt.toDouble()
                             val userAnswer = userAnswerD.toInt()
 
-                            if (userAnswer == answer) {
+                            if ((userAnswer == answer) && (currentPlayer == 1)) {
                                 setPlayer1Points(getPlayer1Points() + 6)
-                            } else {
+                                "Correct!".also { doublePointsText.text = it }
+                            } else if ((userAnswer == answer) && (currentPlayer == 2)) {
+                                setPlayer2Points(getPlayer2Points() + 6)
+                                "Correct!".also { doublePointsText.text = it }
+                            } else if (userAnswer != answer) {
                                 setJackpotPoints(getJackpotPoints() + 6)
+                                "Incorrect!".also { doublePointsText.text = it }
                             }
                         }
                     } // Multiplication
                 }
             } // Double Points
+            5 -> {
+                setProblemText("You lost a turn! Next player rolls!")
+                binding.GuessBtn.visibility = View.INVISIBLE
+            } // Lose a Turn
+            6 -> {
+                "For the Jackpot!! ".also { doublePointsText.text = it }
+                val num1 = (10..20).random()
+                val num2 = (20..30).random()
+                val answer = num1 * num2
+
+                setProblemText("$num1 x $num2 = ")
+
+                binding.GuessBtn.setOnClickListener {
+
+                    val uAnsTxt = binding.userAnswerEditText.text.toString()
+                    val userAnswerD = uAnsTxt.toDouble()
+                    val userAnswer = userAnswerD.toInt()
+
+                    if ((userAnswer == answer) && (currentPlayer == 1)) {
+                        setPlayer1Points(getPlayer1Points() + getJackpotPoints())
+                        setJackpotPoints(5)
+                        "Correct!".also { doublePointsText.text = it }
+                    } else if ((userAnswer == answer) && (currentPlayer == 2)) {
+                        setPlayer2Points(getPlayer2Points() + getJackpotPoints())
+                        setJackpotPoints(5)
+                        "Correct!".also { doublePointsText.text = it }
+                    } else if (userAnswer != answer) {
+                        setJackpotPoints(getJackpotPoints() + 3)
+                        "Incorrect!".also { doublePointsText.text = it }
+                    }
+                }
+            } // Try for Jackpot
         } // Roll Dice
     } // Run Game
 }
