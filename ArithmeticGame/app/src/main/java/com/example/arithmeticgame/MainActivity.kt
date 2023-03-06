@@ -21,43 +21,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun rollDice(): Int {
+            val numRolled = (1..6).random()
+            val dieImage: ImageView = binding.DieImg
+            val drawableResource = when (numRolled) {
+                1 -> R.drawable.dice1
+                2 -> R.drawable.dice2
+                3 -> R.drawable.dice3
+                4 -> R.drawable.dice4
+                5 -> R.drawable.dice5
+                else -> R.drawable.dice6
+            }
 
-        val numRolled = (1..6).random()
-
-        val dieImage: ImageView = binding.DieImg
-
-        val drawableResource = when(numRolled) {
-            1 -> R.drawable.dice1
-            2 -> R.drawable.dice2
-            3 -> R.drawable.dice3
-            4 -> R.drawable.dice4
-            5 -> R.drawable.dice5
-            else -> R.drawable.dice6
-        }
-
-        dieImage.setImageResource(drawableResource)
-
-        return numRolled
+            dieImage.setImageResource(drawableResource)
+            return numRolled
     }
 
     private fun setProblemText(text: String) {
         val problemText: TextView = binding.ProblemText
         problemText.text = text
-    }
-
-    private fun guessButton(actualAnswer: Int): Boolean {
-
-        var isRight = false
-
-        binding.GuessBtn.setOnClickListener {
-            val uAnsTxt = binding.userAnswerEditText.text.toString()
-            val userAnswerD = uAnsTxt.toDouble()
-            val userAnswerI = userAnswerD.toInt()
-            isRight = userAnswerI == actualAnswer
-            }
-
-        return isRight
-
     }
 
     private fun getPlayer1Points(): Int {
@@ -88,27 +69,148 @@ class MainActivity : AppCompatActivity() {
         player1Amt.text = player1Points.toString()
     }
 
-    private fun runGame() {
-
-        var currentPlayer = 1
-        val jackpotAmt: TextView = binding.JackpotAmt
-
-        val numRolled = rollDice()
-
-        // diceRoll = 1 (Addition)
-        if (numRolled == 1) {
-
-            val num1 = (0..99).random()
-            val num2 = (0..99).random()
-            val answer = num1 + num2
-
-            setProblemText("$num1 + $num2 = ")
-
-            val answerIsRight = guessButton(answer)
-
-                if (answerIsRight) { setPlayer1Points(getPlayer1Points() + 1) }
-                else { setJackpotPoints(getJackpotPoints() + 1) }
-            }
-        }
+    private fun setPlayer2Points(player2Points: Int) {
+        val player2Amt: TextView = binding.Player2Amt
+        player2Amt.text = player2Points.toString()
     }
+
+    private fun runGame() {
+        val doublePointsText: TextView = binding.DoublePointsText
+        " ".also { doublePointsText.text = it }
+
+        when (rollDice()) {
+            1 -> {
+
+                val num1 = (0..99).random()
+                val num2 = (0..99).random()
+                val answer = num1 + num2
+
+                setProblemText("$num1 + $num2 = ")
+
+                binding.GuessBtn.setOnClickListener {
+
+                    val uAnsTxt = binding.userAnswerEditText.text.toString()
+                    val userAnswerD = uAnsTxt.toDouble()
+                    val userAnswer = userAnswerD.toInt()
+
+                    if (userAnswer == answer) {
+                        setPlayer1Points(getPlayer1Points() + 1)
+                    } else {
+                        setJackpotPoints(getJackpotPoints() + 1)
+                    }
+                }
+            } // Addition
+            2 -> {
+                val num1 = (0..99).random()
+                val num2 = (0..99).random()
+                val answer = num1 - num2
+
+                setProblemText("$num1 - $num2 = ")
+
+                binding.GuessBtn.setOnClickListener {
+
+                    val uAnsTxt = binding.userAnswerEditText.text.toString()
+                    val userAnswerD = uAnsTxt.toDouble()
+                    val userAnswer = userAnswerD.toInt()
+
+                    if (userAnswer == answer) {
+                        setPlayer1Points(getPlayer1Points() + 2)
+                    } else {
+                        setJackpotPoints(getJackpotPoints() + 2)
+                    }
+                }
+            } // Subtraction
+            3 -> {
+                val num1 = (0..20).random()
+                val num2 = (0..20).random()
+                val answer = num1 * num2
+
+                setProblemText("$num1 x $num2 = ")
+
+                binding.GuessBtn.setOnClickListener {
+
+                    val uAnsTxt = binding.userAnswerEditText.text.toString()
+                    val userAnswerD = uAnsTxt.toDouble()
+                    val userAnswer = userAnswerD.toInt()
+
+                    if (userAnswer == answer) {
+                        setPlayer1Points(getPlayer1Points() + 3)
+                    } else {
+                        setJackpotPoints(getJackpotPoints() + 3)
+                    }
+
+
+                }
+            } // Multiplication
+            4 -> {
+                when ((1..3).random()) {
+                    1 -> {
+                        "Double Points! (+2) ".also { doublePointsText.text = it }
+                        val num1 = (0..99).random()
+                        val num2 = (0..99).random()
+                        val answer = num1 + num2
+
+                        setProblemText("$num1 + $num2 = ")
+
+                        binding.GuessBtn.setOnClickListener {
+
+                            val uAnsTxt = binding.userAnswerEditText.text.toString()
+                            val userAnswerD = uAnsTxt.toDouble()
+                            val userAnswer = userAnswerD.toInt()
+
+                            if (userAnswer == answer) {
+                                setPlayer1Points(getPlayer1Points() + 2)
+                            } else {
+                                setJackpotPoints(getJackpotPoints() + 2)
+                            }
+                        }
+                    } // Addition
+                    2 -> {
+                        "Double Points! (+4) ".also { doublePointsText.text = it }
+                        val num1 = (0..99).random()
+                        val num2 = (0..99).random()
+                        val answer = num1 - num2
+
+                        setProblemText("$num1 - $num2 = ")
+
+                        binding.GuessBtn.setOnClickListener {
+
+                            val uAnsTxt = binding.userAnswerEditText.text.toString()
+                            val userAnswerD = uAnsTxt.toDouble()
+                            val userAnswer = userAnswerD.toInt()
+
+                            if (userAnswer == answer) {
+                                setPlayer1Points(getPlayer1Points() + 4)
+                            } else {
+                                setJackpotPoints(getJackpotPoints() + 4)
+                            }
+                        }
+                    } // Subtraction
+                    3 -> {
+                        "Double Points! (+6) ".also { doublePointsText.text = it }
+                        val num1 = (0..20).random()
+                        val num2 = (0..20).random()
+                        val answer = num1 * num2
+
+                        setProblemText("$num1 x $num2 = ")
+
+                        binding.GuessBtn.setOnClickListener {
+
+                            val uAnsTxt = binding.userAnswerEditText.text.toString()
+                            val userAnswerD = uAnsTxt.toDouble()
+                            val userAnswer = userAnswerD.toInt()
+
+                            if (userAnswer == answer) {
+                                setPlayer1Points(getPlayer1Points() + 6)
+                            } else {
+                                setJackpotPoints(getJackpotPoints() + 6)
+                            }
+                        }
+                    } // Multiplication
+                }
+            } // Double Points
+        } // Roll Dice
+    } // Run Game
+}
+
 

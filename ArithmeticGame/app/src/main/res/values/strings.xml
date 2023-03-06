@@ -14,4 +14,5 @@
     <string name="cdescription">DieImg</string>
     <string name="jackpotAmt">5</string>
     <string name="currentPlayer">P1</string>
+    <string name="DoubleText" />
 </resources>
